@@ -1,17 +1,14 @@
 import 'package:mysql1/mysql1.dart';
 
-Future main() async {
-  // Open a connection
-  final conn = await MySqlConnection.connect(ConnectionSettings(
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    db: 'flutter_demo',
-  ));
+class Mysql {
+  static String host = '127.0.0.1', user = 'root', db = 'flutter_demo';
+  static int port = 3306;
 
-  var results = await conn.query('SELECT * FROM flutter_demo.user');
-  print(results);
+  Mysql();
 
-  // Finally, close the connection
-  await conn.close();
+  Future<MySqlConnection> getConnection() async {
+    var settings =
+        new ConnectionSettings(host: host, port: port, user: user, db: db);
+    return await MySqlConnection.connect(settings);
+  }
 }

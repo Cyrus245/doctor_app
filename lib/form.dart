@@ -1,3 +1,4 @@
+import 'package:doctor_app/db/connection.dart';
 import 'package:flutter/material.dart';
 
 class MyForm extends StatefulWidget {
@@ -7,6 +8,7 @@ class MyForm extends StatefulWidget {
 
 class _MyFormState extends State<MyForm> {
   final _formKey = GlobalKey<FormState>();
+  var db = Mysql();
 
   String _name = '';
   String _email = '';
@@ -53,8 +55,13 @@ class _MyFormState extends State<MyForm> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
-                    print('Name: $_name');
-                    print('Email: $_email');
+                    db.getConnection().then((conn) {
+                      String sql = 'select * from flutter_demo.user';
+                      conn.query(sql).then((results) {
+                        print(results);
+                      });
+                      conn.close();
+                    });
                   }
                 },
                 child: Text('Submit'),
